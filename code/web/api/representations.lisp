@@ -31,12 +31,10 @@ The json format for "links" :
 	   (version (cdr (assoc "groklogsVersion" result :test #'equal)))
 	   (link-list (cdr (assoc "links" result :test #'equal))))
       (unless (= link-count (length link-list))
-	(error "Link count does not match the number of links" link-count (length links)))
+	(error "Link count does not match the number of links" link-count (length link-list)))
       ;; I should signal an error when any of link-count, version, links is nil!
       (loop 
 	 for links in link-list
 	 for uid = (cdr (assoc "uid" links :test #'equal))
 	 for link = (cdr (assoc "link" links :test #'equal))
          collect (list uid link)))))
-	   
-	   
