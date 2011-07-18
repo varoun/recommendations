@@ -25,35 +25,34 @@
 	 (client (third uri-components))
 	 (resource (fourth uri-components)))
     (process-api api-version
-		 (intern client :groklogs-rest)
-		 (intern resource :groklogs-rest)
-		 http-method)))
+                 (intern resource :groklogs-rest)
+		 http-method
+                 client)))
 
 
 ;;;; The protocol
-(defgeneric process-api (api-version client resource http-method)
+(defgeneric process-api (api-version resource http-method client)
   (:documentation
 "Take an API version, client name, a resource, and the http-method and build a response."))
 
 ;;;; The implementation for process-api.
-(defmethod process-api ((api-version (eql 1)) (client (eql '|groklogs|)) 
-			(resource (eql '|user|)) (http-method (eql :GET)))
+(defmethod process-api ((api-version (eql 1)) (resource (eql '|user|)) 
+                        (http-method (eql :GET)) client)
   (format nil "API Version: ~a, Client: ~a, Resource: ~a, Method: ~a"
 	  api-version
 	  client
 	  resource
 	  http-method))
 
-(defmethod process-api (api-version client resource http-method)
+(defmethod process-api (api-version resource http-method client)
   (format nil "DEFAULTING -- API Version: ~a, Client: ~a, Resource: ~a, Method: ~a"
 	  api-version
 	  client
 	  resource
 	  http-method))
 
-(defmethod process-api ((api-version (eql 1)) (client (eql '|groklogs|))
-                        (resource (eql '|links|)) (http-method (eql :PUT)))
+(defmethod process-api ((api-version (eql 1)) (resource (eql '|links|)) 
+                        (http-method (eql :PUT)) client)
   (let ((http-body (raw-post-data :want-stream t)))
     (prin1-to-string (decode-representation http-body 
                                             (intern "JSON" :groklogs-representations)))))
-
