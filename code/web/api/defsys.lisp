@@ -2,4 +2,8 @@
 
 (defsystem groklogs-webapi
   (:default-pathname "./")
-  :members ("packages" "representations" "rest-frame"))
+  :members ("packages"
+            "dbspecs"
+            "datastore" 
+            "representations" 
+            "rest-frame"))

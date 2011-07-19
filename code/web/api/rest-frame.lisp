@@ -54,5 +54,5 @@
 (defmethod process-api ((api-version (eql 1)) (resource (eql '|links|)) 
                         (http-method (eql :PUT)) client)
   (let ((http-body (raw-post-data :want-stream t)))
-    (prin1-to-string (decode-representation http-body 
-                                            (intern "JSON" :groklogs-representations)))))
+    (add-to-links (decode-representation http-body 
+                                         (intern "JSON" :groklogs-representations)))))
