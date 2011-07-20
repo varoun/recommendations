@@ -44,3 +44,39 @@ The json format for "links" :
        for uid = (cdr (assoc *uid-key* links))
        for link = (cdr (assoc *link-key* links))
        collect (list uid link))))
+
+;;;; Constructors that make the list that can be consumed by encode-json.
+
+(defun make-version (version-number)
+  (cons *version-key* version-number))
+
+(defun make-linktotal (number-of-links)
+  (cons *total-key* number-of-links))
+
+(defun make-uid (uid)
+  (cons *uid-key* uid))
+
+(defun make-link (link)
+  (if (listp link)
+      (cons *link-key* link)
+    (cons *link-key* (list link))))
+
+(defun make-uid-link (uid-list link-list)
+  (list uid-list link-list))
+
+(defun make-link-representation (version total-links uid-link-list)
+  (list version total-links (cons *links-key* uid-link-list)))
+#|
+GROKLOGS-REPRESENTATIONS 19 > (make-link-representation
+                               (make-version 0.1)
+                               (make-linktotal 2)
+                               (list (make-uid-link 
+                                      (make-uid 1)
+                                      (make-link '(1 2 3)))
+                                     (make-uid-link
+                                      (make-uid 2)
+                                      (make-link '(4 5 6)))))
+((:GROKLOGS-VERSION . 0.1) (:TOTAL-LINKS . 2) (:LINKS ((:UID . 1) (:LINK 1 2 3)) ((:UID . 2) (:LINK 4 5 6))))
+
+GROKLOGS-REPRESENTATIONS 20 > 
+|#
