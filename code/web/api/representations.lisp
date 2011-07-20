@@ -14,6 +14,13 @@ The json format for "links" :
       	    "link": [ <itemid>, <itemid>, <itemid>, <itemid> ]}]}
 |#
 
+;;;; The keyword symbols.
+(defvar *version-key* :GROKLOGS-VERSION)
+(defvar *total-key* :TOTAL-LINKS)
+(defvar *links-key* :LINKS)
+(defvar *uid-key* :UID)
+(defvar *link-key* :LINK)
+
 ;;;; Protocol for parsing the json representations used in groklogs :
 
 (defgeneric decode-representation (data data-format)
@@ -26,14 +33,14 @@ The json format for "links" :
 
 (defmethod decode-representation (data (data-format (eql 'json)))
   (let* ((result (decode-json data))
-	 (link-count (cdr (assoc :TOTAL-LINKS result)))
-	 (version (cdr (assoc :GROKLOGS-VERSION result)))
-	 (link-list (cdr (assoc :LINKS result))))
+	 (link-count (cdr (assoc *total-key* result)))
+	 (version (cdr (assoc *version-key* result)))
+	 (link-list (cdr (assoc *links-key* result))))
     (unless (= link-count (length link-list))
       (error "Link count does not match the number of links" link-count (length link-list)))
     ;; I should signal an error when any of link-count, version, links is nil!
     (loop 
        for links in link-list
-       for uid = (cdr (assoc :UID links))
-       for link = (cdr (assoc :LINK links))
+       for uid = (cdr (assoc *uid-key* links))
+       for link = (cdr (assoc *link-key* links))
        collect (list uid link))))
