@@ -22,20 +22,18 @@ The json format for "links" :
   lisp structures. This generic function is intended to be specialised using the parameter
   data-format (json, xml ...)"))
 
-;;;; Implementations of decode-groklogs-representation.
+;;;; Implementations of decode-representation.
 
 (defmethod decode-representation (data (data-format (eql 'json)))
-  (let ((*parse-object-as-alist* t))
-    (let* ((result (parse data))
-	   (link-count (cdr (assoc "totalLinks" result :test #'equal)))
-	   (version (cdr (assoc "groklogsVersion" result :test #'equal)))
-	   (link-list (cdr (assoc "links" result :test #'equal))))
-      (unless (= link-count (length link-list))
-	(error "Link count does not match the number of links" link-count (length link-list)))
-      ;; I should signal an error when any of link-count, version, links is nil!
-      (loop 
+  (let* ((result (decode-json data))
+	 (link-count (cdr (assoc :TOTAL-LINKS result)))
+	 (version (cdr (assoc :GROKLOGS-VERSION result)))
+	 (link-list (cdr (assoc :LINKS result))))
+    (unless (= link-count (length link-list))
+      (error "Link count does not match the number of links" link-count (length link-list)))
+    ;; I should signal an error when any of link-count, version, links is nil!
+    (loop 
        for links in link-list
-       for uid = (cdr (assoc "uid" links :test #'equal))
-       for link = (cdr (assoc "link" links :test #'equal))
-       collect (list uid link)))))
-         
+       for uid = (cdr (assoc :UID links))
+       for link = (cdr (assoc :LINK links))
+       collect (list uid link))))
