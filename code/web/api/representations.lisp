@@ -80,3 +80,28 @@ GROKLOGS-REPRESENTATIONS 19 > (make-link-representation
 
 GROKLOGS-REPRESENTATIONS 20 > 
 |#
+
+;;;; The protocol for encoding native lisp structures to external JSON/XML representations.
+(defgeneric encode-representation (data data-format)
+  (:documentation
+"This function is the entrypoint for encoding internal representations of resources to an
+external format like JSON, XML..."))
+
+(defmethod encode-representation (data (data-format (eql 'json)))
+  (encode-json-to-string data))
+#|
+GROKLOGS-REPRESENTATIONS 27 > (encode-representation
+                               (make-link-representation
+                                (make-version 0.1)
+                                (make-linktotal 2)
+                                (list (make-uid-link 
+                                       (make-uid 1)
+                                       (make-link '(1 2 3)))
+                                      (make-uid-link
+                                       (make-uid 2)
+                                       (make-link '(4 5 6)))))
+                               'json)
+"{\"groklogsVersion\":0.1,\"totalLinks\":2,\"links\":[{\"uid\":1,\"link\":[1,2,3]},{\"uid\":2,\"link\":[4,5,6]}]}"
+
+GROKLOGS-REPRESENTATIONS 28 > 
+|#
