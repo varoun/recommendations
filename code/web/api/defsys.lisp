@@ -5,5 +5,6 @@
   :members ("packages"
             "dbspecs"
             "datastore" 
-            "representations" 
+            "representations"
+            "client-rest"
             "rest-frame"))

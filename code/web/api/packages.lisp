@@ -17,4 +17,8 @@
 ;;; The Core rest framework package.
 (defpackage "GROKLOGS-REST" 
   (:use :cl :hunchentoot :cl-ppcre :groklogs-representations :groklogs-datastore))
-  
+
+;;; The REST client.
+(defpackage "GROKLOGS-CLIENT" 
+  (:use :cl :drakma :groklogs-representations))
+
