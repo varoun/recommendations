@@ -3,9 +3,9 @@
 (in-package :groklogs-client)
 
 ;;; The resource URIs.
-(defparameter *links-resource* "http://localhost:4242/1/groklogs/links")
-(defparameter *user-resource* "http://localhost:4242/1/groklogs/user")
-(defparameter *item-resource* "http://localhost:4242/1/groklogs/item")
+(defparameter *links-resource* "http://127.0.0.1:4242/1/groklogs/links")
+(defparameter *user-resource* "http://127.0.0.1:4242/1/groklogs/user")
+(defparameter *item-resource* "http://127.0.0.1:4242/1/groklogs/item")
 
 ;;; The protocol.
 (defgeneric rest-request (resource-name uri http-method datatype &optional representation)
