@@ -19,3 +19,15 @@
   (loop 
    for uid-item = (read filestream nil nil) while uid-item do
    (rest-request 'links *links-resource* :put 'json (make-json-representation uid-item))))
+
+(defun send-movielens-data-raw (dat-file)
+  (with-open-file (st dat-file :direction :input)
+    (loop 
+     for data = (read-line st nil nil) while data
+     for elements = (split ":" data) 
+     for rating = (parse-integer (fifth elements))
+     when (> rating 3) do
+     (rest-request 'links *links-resource* :put 'json 
+                   (make-json-representation (list (parse-integer (first elements))
+                                                   (parse-integer (third elements))))))))
+

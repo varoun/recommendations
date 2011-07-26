@@ -29,6 +29,6 @@
 
 ;;; The REST client.
 (defpackage "GROKLOGS-CLIENT" 
-  (:use :cl :drakma :groklogs-representations)
+  (:use :cl :drakma :cl-ppcre :groklogs-representations)
   (:export "REST-REQUEST"))
 
