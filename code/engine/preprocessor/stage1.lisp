@@ -30,7 +30,12 @@
 					   table-name element count)
 				   :database db-object)
 		  (incf count))))))))
-					     
+
+(defun update-normalised-links (uid iid table-name db-spec)
+  (with-database (db-object db-spec :if-exists :new)
+    (execute-command (format nil "insert into ~a values (~a, ~a)"
+				   table-name uid iid)
+		     :database db-object)))
 
 (defun map-ids (&optional (db *database-spec*)
 		(primary-table *primary-links-table*)
@@ -45,6 +50,5 @@
 		 [select [*] :from primary-table])
 	(let ((new-uid (funcall update-uids uid))
 	      (new-iid (funcall update-iids iid)))
-	  (execute-command (format nil "insert into ~a values (~a, ~a)"
-				   normalised-table new-uid new-iid))))))
+	  (update-normalised-links new-uid new-iid normalised-table db)))))
   #.(disable-sql-reader-syntax))
