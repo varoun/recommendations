@@ -7,16 +7,9 @@
 ;;; A suitably large constant to serve as infinity.
 (defconstant +infinity+ most-positive-fixnum)
 
-;;; The maximum number of users/items in the db.
-(defvar *max-users*)
-(defvar *max-items*)
-
 ;;; The hash function needed to randomly permute rows of the characteristic matrix. We need to
 ;;; make the number-of-buckets used to initialise the function prime.
 (defvar *random-hash*)
-
-;;; The number of minhash functions.
-(defvar *num-minhash*)
 
 ;;; The signature matrix - 
 (defvar *sig*)
