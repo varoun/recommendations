@@ -3,4 +3,5 @@
 (in-package :cl-user)
 
 (defpackage "GROKLOGS-SIMILARITY"
-  (:use :cl :clsql :clsql-postgresql-socket))
+  (:use :cl :clsql))
+
