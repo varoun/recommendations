@@ -48,3 +48,21 @@ GROKLOGS-SIMILARITY> (make-set *database-spec* 1 "itemid" "userid")
        when (= item1 item2) do (incf similar))
     (float (/ similar (length set1))))) ; (= (length set1) (length set2)) ==> T
 
+(defmethod similarity ((source list) field1 field2 &optional field-type result-type)
+  (let ((set1 (make-set source field1 field-type result-type))
+	(set2 (make-set source field2 field-type result-type)))
+    (float (/ (length (intersection set1 set2))
+	      (length (union set1 set2))))))
+#|
+GROKLOGS-SIMILARITY> (make-signature-matrix "userid" "itemid" 500)
+DONE
+GROKLOGS-SIMILARITY> (similarity signature-matrix 0 1)
+0.088
+GROKLOGS-SIMILARITY> (similarity *database-spec* 0 1 "itemid" "userid")
+0.07180081
+GROKLOGS-SIMILARITY> (similarity signature-matrix 17 20)
+0.092
+GROKLOGS-SIMILARITY> (similarity *database-spec* 17 20 "itemid" "userid")
+0.11447811
+GROKLOGS-SIMILARITY> 
+|#
