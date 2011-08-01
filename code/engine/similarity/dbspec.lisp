@@ -17,8 +17,7 @@
   (with-database (sqldb dbspec :if-exists :new)
     (execute-command 
      (format nil 
-	     "create table ~a (itemid integer, itemid_related integer, score float, unique
-(itemid, itemid_related))"
+	     "create table ~a (itemid integer, itemid_related integer, score float)"
 	     table-name)
      :database sqldb)
     (execute-command (format nil "create index ~a on ~a (itemid, itemid_related)"
