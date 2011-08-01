@@ -2,6 +2,9 @@
 
 (in-package :groklogs-similarity)
 
+(defparameter *cutoff-threshold* 0.1
+  "Ignore all elements with a similarity score lower than this.")
+
 ;;;; Simple tests to verify that the compressed set retains the information present in the
 ;;;; original data.
 
@@ -78,3 +81,38 @@ GROKLOGS-SIMILARITY>
 		  (push `(,candidate ,(similarity sig-matrix element candidate))
 			result)))))
     result))
+
+;;; Map IDs to the original, and update the related_items table.
+(defun find-original-id (id id-type id-map &optional 
+			 (db-spec *database-spec*))
+  (with-database (sqldb db-spec :if-exists :new)
+    (first (query (format nil "select ~a from ~a where ~a=~a"
+			  (concatenate 'string id-type "_old")
+			  id-map
+			  (concatenate 'string id-type "_new")
+			  id)
+		  :database sqldb :flatp t))))
+
+
+(defun populate-related-items (bucket-arrays sig-matrix &optional
+			       (db-spec *database-spec*)
+			       (item-maps *iid-map-table*)
+			       (related-items-table *related-table*)
+			       (cutoff *cutoff-threshold*))
+  (with-database (sqldb db-spec :if-exists :new)
+    (dotimes (item (array-dimension sig-matrix 1))
+      (loop for bucket-array in bucket-arrays do
+	   (loop 
+	      for bucket across bucket-array
+	      when (member item bucket) do
+		(let ((candidates (remove item bucket)))
+		  (dolist (candidate candidates)
+		    (let ((sim-score (similarity sig-matrix item candidate))
+			  (item-orig (find-original-id item "itemid" item-maps db-spec))
+			  (candidate-orig (find-original-id candidate "itemid" item-maps
+							    db-spec)))
+		      (when (> sim-score cutoff)
+			(execute-command
+			 (format nil "insert into ~a values (~a, ~a, ~a)"
+				 related-items-table item-orig candidate-orig sim-score)
+			 :database sqldb))))))))))
