@@ -28,3 +28,20 @@ GROKLOGS-SIMILARITY> (funcall dh 123456 0)
 80
 GROKLOGS-SIMILARITY> 
 |#
+
+;;; Hashing a vector (represented as a list) into a bucket.
+(defun hash-vector (list-of-integers doublehash-function)
+  (loop
+       for dh-index in list-of-integers
+       for dh-key = (first list-of-integers) then bucket-number
+       for bucket-number = (funcall doublehash-function dh-key dh-index)
+       finally (return bucket-number)))
+#|
+GROKLOGS-SIMILARITY> (defparameter *dh* (make-double-hash (find-next-prime 500)))
+*DH*
+GROKLOGS-SIMILARITY> (hash-vector '(1 23 45) *dh*)
+391
+GROKLOGS-SIMILARITY> (hash-vector '(12 3 45) *dh*)
+412
+GROKLOGS-SIMILARITY> 
+|#
