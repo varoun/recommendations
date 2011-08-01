@@ -66,3 +66,15 @@ GROKLOGS-SIMILARITY> (similarity *database-spec* 17 20 "itemid" "userid")
 0.11447811
 GROKLOGS-SIMILARITY> 
 |#
+
+(defun find-similar-elements (element bucket-arrays sig-matrix)
+  (let ((result nil))
+    (loop for bucket-array in bucket-arrays do
+	 (loop 
+	    for bucket across bucket-array 
+	    when (member element bucket) do
+	      (let ((candidates (remove element bucket)))
+		(dolist (candidate candidates)
+		  (push `(,candidate ,(similarity sig-matrix element candidate))
+			result)))))
+    result))
