@@ -38,8 +38,8 @@ GROKLOGS-SIMILARITY>
 |#
 
 (defun lsh-sigmatrix (sigmatrix &optional (threshold *threshold*))
-  (let* ((num-rows (1- (array-dimension sigmatrix 0)))
-	 (num-columns (1-(array-dimension sigmatrix 1)))
+  (let* ((num-rows (1- (array-dimension sigmatrix 0))) ; this is max index for rows
+	 (num-columns (1-(array-dimension sigmatrix 1))) ; max index for cols
 	 (band-spec (compute-band-spec num-rows threshold))
 	 (num-rows-per-band (floor (third band-spec)))
 	 (num-buckets (find-next-prime num-columns))
