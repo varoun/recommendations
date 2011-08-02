@@ -5,7 +5,7 @@
 
 ;;; The datastore.
 (defpackage "GROKLOGS-DATASTORE"
-  (:use :cl :clsql :clsql-postgresql-socket)
+  (:use :cl :clsql)
   (:export "ADD-TO-LINKS"))
 
 
