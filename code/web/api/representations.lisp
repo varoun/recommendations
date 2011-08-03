@@ -12,7 +12,14 @@ The json format for "links" :
             "link": [ <itemid>, <itemid>, <itemid> ]},
     	   {"uid":<userid>,
       	    "link": [ <itemid>, <itemid>, <itemid>, <itemid> ]}]}
+
+The json format for "related" :
+{
+ "groklogsVersion":<version of groklogs>,
+  "item":<itemid in the request>,
+  "related":[<itemid>, <itemid>, <itemid>]}
 |#
+
 
 ;;;; The keyword symbols.
 (defvar *version-key* :GROKLOGS-VERSION)
@@ -20,6 +27,8 @@ The json format for "links" :
 (defvar *links-key* :LINKS)
 (defvar *uid-key* :UID)
 (defvar *link-key* :LINK)
+(defvar *item-key* :ITEM)
+(defvar *related-key* :RELATED)
 
 ;;;; Protocol for parsing the json representations used in groklogs :
 
@@ -56,6 +65,9 @@ The json format for "links" :
 (defun make-uid (uid)
   (cons *uid-key* uid))
 
+(defun make-item (itemid)
+  (cons *item-key* itemid))
+
 (defun make-link (link)
   (if (listp link)
       (cons *link-key* link)
@@ -64,8 +76,17 @@ The json format for "links" :
 (defun make-uid-link (uid-list link-list)
   (list uid-list link-list))
 
+(defun make-related-items-list (list-of-related-items)
+  (cons *related-key* list-of-related-items))
+
 (defun make-link-representation (version total-links uid-link-list)
   (list version total-links (cons *links-key* uid-link-list)))
+
+(defun make-related-representation (version item related-items-list)
+  (list (make-version version)
+	(make-item item)
+	(make-related-items-list related-items-list)))
+
 #|
 GROKLOGS-REPRESENTATIONS 19 > (make-link-representation
                                (make-version 0.1)
@@ -104,4 +125,9 @@ GROKLOGS-REPRESENTATIONS 27 > (encode-representation
 "{\"groklogsVersion\":0.1,\"totalLinks\":2,\"links\":[{\"uid\":1,\"link\":[1,2,3]},{\"uid\":2,\"link\":[4,5,6]}]}"
 
 GROKLOGS-REPRESENTATIONS 28 > 
+
+GROKLOGS-REPRESENTATIONS> (encode-representation (make-related-representation 1 2 '(3 4 5))
+						 'json)
+"{\"groklogsVersion\":1,\"item\":2,\"related\":[3,4,5]}"
+GROKLOGS-REPRESENTATIONS> 
 |#
