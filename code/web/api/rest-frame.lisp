@@ -8,11 +8,15 @@
 
 (defparameter *link-regex* "^/[0-9]/[a-z]+/(\\blinks\\b)")
 
+(defparameter *related-regex* "^/[0-9]/[a-z]+/(\\brelated\\b)/[0-9]+")
+
 (defun setup-api-regex-dispatcher ()
   (push (create-regex-dispatcher *api-regex* 'api-handler)
 	*dispatch-table*)
   (push (create-regex-dispatcher *link-regex* 'api-handler)
         *dispatch-table*)
+  (push (create-regex-dispatcher *related-regex* 'api-handler)
+	*dispatch-table*)
   'done)
 
 (setup-api-regex-dispatcher)
@@ -56,3 +60,11 @@
   (let ((http-body (raw-post-data :want-stream t)))
     (add-to-links (decode-representation http-body 
                                          (intern "JSON" :groklogs-representations)))))
+
+(defmethod process-api ((api-version (eql 1)) (resource (eql '|related|))
+			(http-method (eql :GET)) client)
+  (declare (ignore client))
+  (let ((item (fifth (split "/" (request-uri*)))))
+    (encode-representation 
+     (make-related-representation api-version item (get-related-items item))
+     (intern "JSON" :groklogs-representations))))
