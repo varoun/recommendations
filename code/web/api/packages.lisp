@@ -6,7 +6,8 @@
 ;;; The datastore.
 (defpackage "GROKLOGS-DATASTORE"
   (:use :cl :clsql)
-  (:export "ADD-TO-LINKS"))
+  (:export "ADD-TO-LINKS"
+	   "GET-RELATED-ITEMS"))
 
 
 ;;; The package for dealing with representations.
