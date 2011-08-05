@@ -2,11 +2,6 @@
 
 (in-package :groklogs-datastore)
 
-;;;; Database connection details. This should probably go into a seperate configuration file,
-;;;; but for now, we stick it here.
-
-(defparameter *database-spec* (list "127.0.0.1" "groklogs" "groky" "groky"))
-
 ;;;; Database schema.
 (defun initialise-db ()
   (with-database (pgsql *database-spec* :if-exists :old)

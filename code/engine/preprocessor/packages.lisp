@@ -3,4 +3,4 @@
 (in-package :cl-user)
 
 (defpackage "GROKLOGS-PREPROCESSOR"
-  (:use :cl :clsql))
+  (:use :cl :clsql :groklogs-conf))

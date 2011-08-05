@@ -2,15 +2,6 @@
 
 (in-package :groklogs-preprocessor)
 
-;;; Database connection details go here.
-(defparameter *database-spec* (list "127.0.0.1" "groklogs" "groky" "groky"))
-
-;;; The various tables.
-(defparameter *primary-links-table* "links")
-(defparameter *normalised-links-table* "links_normal")
-(defparameter *uid-map-table* "uid_map")
-(defparameter *iid-map-table* "iid_map")
-
 ;;; Initialising the various tables. It is an error to invoke these functions more than once on
 ;;; the same database.
 

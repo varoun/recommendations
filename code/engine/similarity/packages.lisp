@@ -3,5 +3,4 @@
 (in-package :cl-user)
 
 (defpackage "GROKLOGS-SIMILARITY"
-  (:use :cl :clsql))
-
+  (:use :cl :clsql :groklogs-conf))
