@@ -15,7 +15,8 @@
 
 (defun get-related-items (item)
   (with-database (sqldb *database-spec* :if-exists :new)
-    (query (format nil
-		   "select itemid_related from related_items where itemid=~a and score > 0.15
-  order by score desc" item)
-	   :database sqldb :flatp t)))
+    (mapcar #'first
+	    (query (format nil
+			   "select distinct itemid_related, score from related_items where
+  itemid=~a order by score desc" item) 
+		   :database sqldb :flatp t))))
