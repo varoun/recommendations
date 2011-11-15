@@ -6,7 +6,7 @@
 
 ;;; Connection details.
 (defparameter *database-host* "127.0.0.1")
-(defparameter *database-name* "groklogs")
+(defparameter *database-name* "movielens")
 (defparameter *database-user* "groky")
 (defparameter *database-password* "groky")
 

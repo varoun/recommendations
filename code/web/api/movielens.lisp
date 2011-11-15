@@ -24,10 +24,10 @@
   (with-open-file (st dat-file :direction :input)
     (loop 
      for data = (read-line st nil nil) while data
-     for elements = (split ":" data) 
-     for rating = (parse-integer (fifth elements))
+     for elements = (split "[^0-9]+" data) 
+     for rating = (parse-integer (third elements))
      when (> rating 3) do
      (rest-request 'links *links-resource* :put 'json 
                    (make-json-representation (list (parse-integer (first elements))
-                                                   (parse-integer (third elements))))))))
+                                                   (parse-integer (second elements))))))))
 
