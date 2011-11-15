@@ -14,4 +14,12 @@
 	   "*UID-MAP-TABLE*"
 	   "*IID-MAP-TABLE*"
 	   "*LINKS-TABLE-SOURCE*"
-	   "*RELATED-TABLE*"))
+	   "*RELATED-TABLE*"
+	   "*USER-COL*"
+	   "*ITEM-COL*"
+	   "*ITEM-OLD-COL*"
+	   "*ITEM-NEW-COL*"
+	   "*USER-OLD-COL*"
+	   "*USER-NEW-COL*"
+	   "*RELATED-ITEM-COL*"
+	   "*SCORE-COL*"))

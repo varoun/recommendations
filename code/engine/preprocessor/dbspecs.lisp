@@ -6,36 +6,42 @@
 ;;; the same database.
 
 (defun initialise-normalised-links-table (&optional (db-spec *database-spec*)
-					  (table-name *normalised-links-table*))
+					  (table-name *normalised-links-table*)
+					  (user-col *user-col*)
+					  (item-col *item-col*))
   (with-database (pgsql db-spec :if-exists :old)
-    (execute-command (format nil "create table ~a (userid integer, itemid integer)"
-			     table-name)
+    (execute-command (format nil "create table ~a (~a integer, ~a integer)"
+			     table-name user-col item-col)
 		     :database pgsql)
-    (execute-command (format nil "create index ~a on ~a (userid, itemid)"
+    (execute-command (format nil "create index ~a on ~a (~a, ~a)"
 			     (concatenate 'string table-name "_index")
-			     table-name)
+			     table-name user-col item-col)
 		     :database pgsql)))
 
 
 
 (defun initialise-uid-map-table (&optional (db-spec *database-spec*)
-				 (table-name *uid-map-table*))
+				 (table-name *uid-map-table*)
+				 (old-user-id *user-old-col*)
+				 (new-user-id *user-new-col*))
   (with-database (pgsql db-spec :if-exists :old)
-    (execute-command (format nil "create table ~a (userid_old integer, userid_new integer)"
-			     table-name)
+    (execute-command (format nil "create table ~a (~a integer, ~a integer)"
+			     table-name old-user-id new-user-id)
 		     :database pgsql)
-    (execute-command (format nil "create index ~a on ~a (userid_old, userid_new)"
+    (execute-command (format nil "create index ~a on ~a (~a, ~a)"
 			     (concatenate 'string table-name "_index")
-			     table-name)
+			     table-name old-user-id new-user-id)
 		     :database pgsql)))
 
 (defun initialise-iid-map-table (&optional (db-spec *database-spec*)
-				 (table-name *iid-map-table*))
+				 (table-name *iid-map-table*)
+				 (old-item-id *item-old-col*)
+				 (new-item-id *item-new-col*))
   (with-database (pgsql db-spec :if-exists :old)
-    (execute-command (format nil "create table ~a (itemid_old integer, itemid_new integer)"
-			     table-name)
+    (execute-command (format nil "create table ~a (~a integer, ~a integer)"
+			     table-name old-item-id new-item-id)
 		     :database pgsql)
-    (execute-command (format nil "create index ~a on ~a (itemid_old, itemid_new)"
+    (execute-command (format nil "create index ~a on ~a (~a, ~a)"
 			     (concatenate 'string table-name "_index")
-			     table-name)
+			     table-name old-item-id new-item-id)
 		     :database pgsql)))

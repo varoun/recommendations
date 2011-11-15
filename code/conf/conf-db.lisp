@@ -20,3 +20,14 @@
 (defparameter *iid-map-table* "iid_map")
 (defparameter *links-table-source* "links_normal")
 (defparameter *related-table* "related_items")
+
+;;; Columns
+
+(defparameter *user-col* "userid")
+(defparameter *item-col* "itemid")
+(defparameter *item-old-col* "itemid_old")
+(defparameter *item-new-col* "itemid_new")
+(defparameter *user-old-col* "userid_old")
+(defparameter *user-new-col* "userid_new")
+(defparameter *related-item-col* "itemid_related")
+(defparameter *score-col* "score")

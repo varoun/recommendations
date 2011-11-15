@@ -4,14 +4,17 @@
 
 ;;; creating the related table.
 (defun initialise-related-items-table (&optional (dbspec *database-spec*)
-				       (table-name *related-table*))
+				       (table-name *related-table*)
+				       (items *item-col*)
+				       (related-items *related-item-col*)
+				       (score *score-col*))
   (with-database (sqldb dbspec :if-exists :new)
     (execute-command 
      (format nil 
-	     "create table ~a (itemid integer, itemid_related integer, score float)"
-	     table-name)
+	     "create table ~a (~a integer, ~a integer, ~a float)"
+	     table-name items related-items score)
      :database sqldb)
-    (execute-command (format nil "create index ~a on ~a (itemid, itemid_related)"
+    (execute-command (format nil "create index ~a on ~a (~a, ~a)"
 			     (concatenate 'string table-name "_index")
-			     table-name)
+			     table-name items related-items)
 		     :database sqldb)))
