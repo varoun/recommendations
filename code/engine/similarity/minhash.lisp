@@ -15,9 +15,11 @@
 (defvar *sig*)
 
 ;;; When we call the functions that need to know the max users/items, we use find-max-element.
-(defun find-max-element (element-name)
-  (with-database (sqldb *database-spec* :if-exists :new)
-    (first (query (format nil "select max(~a) from ~a" element-name *links-table-source*)
+(defun find-max-element (element-name &optional
+			 (db-spec *database-spec*)
+			 (source-links *normalised-links-table*))
+  (with-database (sqldb db-spec :if-exists :new)
+    (first (query (format nil "select max(~a) from ~a" element-name source-links)
 		  :database sqldb :flatp t))))
 
 ;;; Updating a column of the signature matrix with a new column vector.
@@ -38,16 +40,18 @@
     col))
 
 ;;; Building the signature matrix.
-(defun make-signature-matrix (row-type col-type num-hash)
+(defun make-signature-matrix (row-type col-type num-hash &optional
+			      (db-spec *database-spec*)
+			      (source-links *normalised-links-table*))
   (let* ((rows (find-max-element row-type))
 	 (cols (find-max-element col-type))
 	 (*sig* (make-array `(,num-hash ,(1+ cols)) :initial-element +infinity+))
 	 (*random-hash* (make-double-hash (find-next-prime rows))))
-    (with-database (sqldb *database-spec* :if-exists :new)
+    (with-database (sqldb db-spec :if-exists :new)
       (dotimes (index (1+ rows))
 	(let ((row-elements (query (format nil 
 					   "select ~a from ~a where ~a=~a"
-					   col-type *links-table-source* row-type index)
+					   col-type source-links row-type index)
 				   :flatp t :database sqldb))
 	      (hash-vector (make-hash-column index *random-hash* num-hash)))
 	  (dolist (col-index row-elements)

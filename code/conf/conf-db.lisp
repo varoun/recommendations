@@ -18,7 +18,6 @@
 (defparameter *normalised-links-table* "links_normal")
 (defparameter *uid-map-table* "uid_map")
 (defparameter *iid-map-table* "iid_map")
-(defparameter *links-table-source* "links_normal")
 (defparameter *related-table* "related_items")
 
 ;;; Columns

@@ -8,7 +8,7 @@
 ;;;; Simple tests to verify that the compressed set retains the information present in the
 ;;;; original data.
 
-(defgeneric make-set (source field &optional field-type result-type)
+(defgeneric make-set (source field &optional field-type result-type db-spec source-links)
   (:documentation 
 "Build a list representation of a set from the characteristic matrix or the signature matrix."))
 
@@ -16,20 +16,28 @@
   (:documentation 
 "Find the Jaccard similarity between two columns."))
 
-(defmethod make-set ((source simple-array) element-id &optional element-type result-type)
+(defmethod make-set ((source simple-array) element-id &optional 
+		     element-type 
+		     result-type
+		     db-spec
+		     source-links)
   "Takes a signature matrix, and builds a list representation of the set of elements that make
 up a column of the matrix."
-  (declare (ignore element-type result-type))
+  (declare (ignore element-type result-type db-spec source-links))
   (let ((result nil))
     (dotimes (index (array-dimension source 0) result)
       (push (aref source index element-id) result))))
 
-(defmethod make-set ((source list) element-id &optional element-type result-type)
+(defmethod make-set ((source list) element-id &optional 
+		     element-type 
+		     result-type
+		     (db-spec *database-spec*)
+		     (source-links *normalised-links-table*))
   "Takes a characeristic matrix, as represented in the SQL DB, and builds a list representation
 of the set of elements that are the members referred to by element-id."
-  (with-database (sqldb *database-spec* :if-exists :new)
+  (with-database (sqldb db-spec :if-exists :new)
     (query (format nil "select ~a from ~a where ~a=~a"
-		   result-type *links-table-source* element-type element-id)
+		   result-type source-links element-type element-id)
 	   :database sqldb :flatp t)))
 #|
 GROKLOGS-SIMILARITY> (make-set signature-matrix 17)
