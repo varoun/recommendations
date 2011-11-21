@@ -9,9 +9,9 @@ The json format for "links" :
  "groklogsVersion":<version of groklogs>,
   "totalLinks":<the total number of links sent>,
   "links":[{"uid":<userid>,
-            "link": [ <itemid>, <itemid>, <itemid> ]},
+            "link": [[<itemid>,<weight>],[<itemid>,<weight>],[<itemid>,[weight]]},
     	   {"uid":<userid>,
-      	    "link": [ <itemid>, <itemid>, <itemid>, <itemid> ]}]}
+      	    "link": [[<itemid>,<weight>],[<itemid>,<weight>]]}]}
 
 The json format for "related" :
 {
